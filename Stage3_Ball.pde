@@ -99,7 +99,7 @@ void draw() {
     // see if the ball is within the bounding box of the contour, if so it's a hit
     noFill();
     Rectangle bb = contour.getBoundingBox();
-    bb.setBounds((int) (bb.x * resizeRatio.x), (int)(bb.y * resizeRatio.y), (int)(bb.width * resizeRatio.x), (int)(bb.height * resizeRatio.y));
+    bb.setBounds((int) (displayW - bb.x * resizeRatio.x - bb.width), (int)(bb.y * resizeRatio.y), (int)(bb.width * resizeRatio.x), (int)(bb.height * resizeRatio.y));
     if (buttonDown) {
       stroke(0, 255, 0);
       rect(bb.x, bb.y, bb.width, bb.height);
