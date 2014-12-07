@@ -2,12 +2,6 @@ import com.jonwohl.*;
 import processing.video.*;
 
 import gab.opencv.*;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Point;
-import org.opencv.core.Size;
-import org.opencv.core.Mat;
-import org.opencv.core.CvType;
 
 import java.awt.Rectangle;
 
@@ -51,7 +45,7 @@ void draw() {
   opencv.loadImage(out);
   
   opencv.gray();
-  float thresh = map(mouseY, 0, height, 0, 100); 
+  float thresh = map(mouseY, 0, height, 0, 255); 
   opencv.threshold(int(thresh));
 //  opencv.invert();
   
