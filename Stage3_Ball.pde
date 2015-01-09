@@ -17,7 +17,8 @@ void setup() {
 //  size(displayWidth, displayHeight);
   size(800, 800);
   
-  cam = new Capture(this, 640, 480, "Sirius USB2.0 Camera", 30);
+//  cam = new Capture(this, 640, 480, "Sirius USB2.0 Camera", 30);
+  cam = new Capture(this, 640, 480);
   cam.start();
   
   // instantiate focus passing an initial input image
