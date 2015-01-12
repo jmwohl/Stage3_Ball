@@ -15,6 +15,7 @@ PVector resizeRatio = new PVector(displayW / camW, displayH / camH);
 
 Arduino arduino;
 int buttonPin = 4;
+int potPin = 0;
 
 Ball ball;
 Capture cam;
@@ -37,12 +38,12 @@ void setup() {
   // println(ards);
   
   // for Mac
-  arduino = new Arduino(this, ards[ards.length - 1], 57600);
+  // arduino = new Arduino(this, ards[ards.length - 1], 57600);
   // for Odroid
-//  arduino = new Arduino(this, ards[ards.length - 1], 57600);
+  arduino = new Arduino(this, "/dev/ttyACM0", 57600);
   arduino.pinMode(4, Arduino.INPUT);
   
-  cam = new Capture(this, camW, camH);
+  cam = new Capture(this, camW, camH, "/dev/video0", 30);
 
   cam.start();
   
@@ -76,7 +77,7 @@ void draw() {
   out = attention.focus(cam, cam.width, cam.height);
   
   // threshold using only the red pixels
-  float thresh = map(mouseY, 0, height, 0, 255); 
+  float thresh = map(arduino.analogRead(potPin), 0, 1024, 0, 255); 
   redThreshold(out, thresh);
   
   opencv.loadImage(out);
