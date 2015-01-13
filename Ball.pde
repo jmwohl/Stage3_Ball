@@ -19,7 +19,7 @@ class Ball {
     }
     if (pos.y >= height - rad/2) {
       // ball hit bottom of window, game over
-      println("Game Over!");
+      //println("Game Over!");
       pos.x = random(0, width);
       pos.y = random(0, height/2);
       vel.x = random(3, 6);

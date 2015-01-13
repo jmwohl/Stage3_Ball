@@ -29,7 +29,7 @@ int paddleMaxArea = 20000;
 int paddleMinArea = 1000;
 int ballRadius = 100;
 
-boolean buttonDown = false;
+boolean buttonDown = true;
 
 void setup() {
   size(displayW, displayH);
@@ -38,12 +38,14 @@ void setup() {
   // println(ards);
   
   // for Mac
-  // arduino = new Arduino(this, ards[ards.length - 1], 57600);
+  //arduino = new Arduino(this, ards[ards.length - 1], 57600);
   // for Odroid
   arduino = new Arduino(this, "/dev/ttyACM0", 57600);
   arduino.pinMode(4, Arduino.INPUT);
   
   cam = new Capture(this, camW, camH, "/dev/video0", 30);
+  //cam = new Capture(this, camW, camH, 30);
+  //cam = new Capture(this, camW, camH, "Sirius USB2.0 Camera", 30);
 
   cam.start();
   
@@ -68,9 +70,9 @@ void draw() {
   
   // show attention view on buttonpress
   if (arduino.digitalRead(buttonPin) == Arduino.HIGH){
-    buttonDown = true; 
+    //buttonDown = true; 
   } else {
-    buttonDown = false;
+    //buttonDown = false;
   }
   
   // warp the selected region on the input image (cam) to an output image of width x height
@@ -102,7 +104,8 @@ void draw() {
     bb.setBounds((int) (displayW - bb.x * resizeRatio.x - bb.width), (int)(bb.y * resizeRatio.y), (int)(bb.width * resizeRatio.x), (int)(bb.height * resizeRatio.y));
     if (buttonDown) {
       stroke(0, 255, 0);
-      rect(bb.x, bb.y, bb.width, bb.height);
+      //rect(bb.x, bb.y, bb.width, bb.height);
+      rect((width - bb.x - bb.width), bb.y, bb.width, bb.height);
     }
     noStroke();
     // resize bb
