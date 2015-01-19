@@ -29,7 +29,7 @@ int paddleMaxArea = 20000;
 int paddleMinArea = 1000;
 int ballRadius = 100;
 
-boolean buttonDown = true;
+boolean buttonDown = false;
 
 void setup() {
   size(displayW, displayH);
@@ -40,10 +40,14 @@ void setup() {
   // for Mac
   //arduino = new Arduino(this, ards[ards.length - 1], 57600);
   // for Odroid
-  arduino = new Arduino(this, "/dev/ttyACM0", 57600);
+  arduino = new Arduino(this, ards[0], 57600);
   arduino.pinMode(4, Arduino.INPUT);
   
-  cam = new Capture(this, camW, camH, "/dev/video0", 30);
+  try {
+    cam = new Capture(this, camW, camH, "/dev/video0", 30);
+  } catch(Exception e) {
+    cam = new Capture(this, camW, camH, "/dev/video1", 30);
+  }
   //cam = new Capture(this, camW, camH, 30);
   //cam = new Capture(this, camW, camH, "Sirius USB2.0 Camera", 30);
 
@@ -62,7 +66,7 @@ void setup() {
 
 void draw() {
   background(0);
-  
+  //snoCursor();
   if (cam.available()) { 
     // Reads the new frame
     cam.read();
@@ -70,9 +74,9 @@ void draw() {
   
   // show attention view on buttonpress
   if (arduino.digitalRead(buttonPin) == Arduino.HIGH){
-    //buttonDown = true; 
+    buttonDown = true; 
   } else {
-    //buttonDown = false;
+    buttonDown = false;
   }
   
   // warp the selected region on the input image (cam) to an output image of width x height
@@ -101,11 +105,11 @@ void draw() {
     // see if the ball is within the bounding box of the contour, if so it's a hit
     noFill();
     Rectangle bb = contour.getBoundingBox();
-    bb.setBounds((int) (displayW - bb.x * resizeRatio.x - bb.width), (int)(bb.y * resizeRatio.y), (int)(bb.width * resizeRatio.x), (int)(bb.height * resizeRatio.y));
+    bb.setBounds((int) ((camW -(bb.x + bb.width)) * resizeRatio.x), (int)(bb.y * resizeRatio.y), (int)(bb.width * resizeRatio.x), (int)(bb.height * resizeRatio.y));
     if (buttonDown) {
       stroke(0, 255, 0);
       //rect(bb.x, bb.y, bb.width, bb.height);
-      rect((width - bb.x - bb.width), bb.y, bb.width, bb.height);
+      rect(bb.x, bb.y, bb.width, bb.height);
     }
     noStroke();
     // resize bb
@@ -117,7 +121,7 @@ void draw() {
     
 //    contour.draw();
   }
-  
+  contours.clear();
   ball.move();
   ball.draw();
   if (debugView){
