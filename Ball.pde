@@ -35,7 +35,7 @@ class Ball {
   
   void draw() {
     fill(255);
-    ellipse(pos.x, pos.y, rad, rad*1.2);
+    ellipse(pos.x, pos.y, rad, rad*0.92);
   }
   
 }

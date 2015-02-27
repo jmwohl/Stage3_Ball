@@ -3,7 +3,7 @@ import processing.video.*;
 import gab.opencv.*;
 import java.awt.Rectangle;
 import processing.serial.*;
-import cc.arduino.*;
+//import cc.arduino.*;
 
 int displayW = 1024;
 int displayH = 768;
@@ -13,7 +13,7 @@ int camH = 240;
 
 PVector resizeRatio = new PVector(displayW / camW, displayH / camH);
 
-Arduino arduino;
+//Arduino arduino;
 int buttonPin = 4;
 int potPin = 0;
 
@@ -34,21 +34,21 @@ boolean buttonDown = false;
 void setup() {
   size(displayW, displayH);
   frameRate(30);
-  String[] ards = Arduino.list();
+//  String[] ards = Arduino.list();
   // println(ards);
   
   // for Mac
   //arduino = new Arduino(this, ards[ards.length - 1], 57600);
   // for Odroid
-  arduino = new Arduino(this, ards[0], 57600);
-  arduino.pinMode(4, Arduino.INPUT);
+//  arduino = new Arduino(this, ards[0], 57600);
+//  arduino.pinMode(4, Arduino.INPUT);
   
   try {
     cam = new Capture(this, camW, camH, "/dev/video0", 30);
   } catch(Exception e) {
     cam = new Capture(this, camW, camH, "/dev/video1", 30);
   }
-  //cam = new Capture(this, camW, camH, 30);
+//  cam = new Capture(this, camW, camH, 30);
   //cam = new Capture(this, camW, camH, "Sirius USB2.0 Camera", 30);
 
   cam.start();
@@ -73,17 +73,17 @@ void draw() {
   }
   
   // show attention view on buttonpress
-  if (arduino.digitalRead(buttonPin) == Arduino.HIGH){
-    buttonDown = true; 
-  } else {
-    buttonDown = false;
-  }
+//  if (arduino.digitalRead(buttonPin) == Arduino.HIGH){
+//    buttonDown = true; 
+//  } else {
+//    buttonDown = false;
+//  }
   
   // warp the selected region on the input image (cam) to an output image of width x height
   out = attention.focus(cam, cam.width, cam.height);
   
   // threshold using only the red pixels
-  float thresh = map(arduino.analogRead(potPin), 0, 1024, 0, 255); 
+  float thresh = map(mouseY, 0, 768, 0, 255); 
   redThreshold(out, thresh);
   
   opencv.loadImage(out);
@@ -132,6 +132,9 @@ void draw() {
 void keyPressed() {
   if (key == 'D' || key == 'd') {
     debugView = !debugView;  
+  }
+  if (key == 'B' || key == 'b') {
+    buttonDown = !buttonDown;
   }
 }
 
